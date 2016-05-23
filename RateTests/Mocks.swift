@@ -27,38 +27,49 @@ class UrlOpenerMock: UrlOpener
 
 class DataSaverMock: DataSaverType
 {
+    var lastSavedIntKey: String?
+    var lastSavedDateKey: String?
+    var lastSavedBoolKey: String?
+    var lastSavedStringKey: String?
+
     var lastSavedIntValue: Int?
-    var lastSavedKey: String?
     var lastSavedDateValue: NSDate?
     var lastSavedBool: Bool?
+    var lastSavedString: String?
     
     func saveInt(value: Int, key: String) {
+        lastSavedIntKey = key
         lastSavedIntValue = value
-        lastSavedKey = key
     }
     
     func saveBool(value: Bool, key: String) {
-        lastSavedKey = key
+        lastSavedBoolKey = key
         lastSavedBool = value
-        
     }
-    
-    func getIntForKey(key: String) -> Int {
-        return lastSavedIntValue ?? -1
-    }
-    
-    func getBoolForKey(key: String) -> Bool {
-        lastSavedKey = key
-        return false
-    }
-    
+
     func saveDate(date: NSDate, key: String) {
+        lastSavedDateKey = key
         lastSavedDateValue = date
-        lastSavedKey = key
+    }
+
+    func saveString(string: String, key: String) {
+        lastSavedStringKey = key
+        lastSavedString = string
+    }
+
+    func getIntForKey(key: String) -> Int? {
+        return lastSavedIntValue
     }
     
-    func getDate(key: String) -> NSDate {
-        lastSavedKey = key
-        return NSDate()
+    func getBoolForKey(key: String) -> Bool? {
+        return lastSavedBool
+    }
+
+    func getDate(key: String) -> NSDate? {
+        return lastSavedDateValue
+    }
+
+    func getString(key: String) -> String? {
+        return lastSavedString
     }
 }

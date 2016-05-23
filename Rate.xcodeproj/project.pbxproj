@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38618C121CF34F74009F9F7B /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38618C111CF34F74009F9F7B /* Protocols.swift */; };
+		38618C141CF34F94009F9F7B /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38618C131CF34F94009F9F7B /* Types.swift */; };
+		38618C161CF3503D009F9F7B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38618C151CF3503D009F9F7B /* Utilities.swift */; };
 		846B89BE1CE4D44600C41BA1 /* Rate.h in Headers */ = {isa = PBXBuildFile; fileRef = 846B89BD1CE4D44600C41BA1 /* Rate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		846B89C51CE4D44700C41BA1 /* Rate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 846B89BA1CE4D44600C41BA1 /* Rate.framework */; };
 		846B89CA1CE4D44700C41BA1 /* RateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846B89C91CE4D44700C41BA1 /* RateTests.swift */; };
@@ -25,6 +28,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		38618C111CF34F74009F9F7B /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		38618C131CF34F94009F9F7B /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
+		38618C151CF3503D009F9F7B /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		846B89BA1CE4D44600C41BA1 /* Rate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Rate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		846B89BD1CE4D44600C41BA1 /* Rate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rate.h; sourceTree = "<group>"; };
 		846B89BF1CE4D44600C41BA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -78,6 +84,9 @@
 				846B89BD1CE4D44600C41BA1 /* Rate.h */,
 				846B89BF1CE4D44600C41BA1 /* Info.plist */,
 				846B89D41CE4D62D00C41BA1 /* Rate.swift */,
+				38618C111CF34F74009F9F7B /* Protocols.swift */,
+				38618C131CF34F94009F9F7B /* Types.swift */,
+				38618C151CF3503D009F9F7B /* Utilities.swift */,
 			);
 			path = Rate;
 			sourceTree = "<group>";
@@ -200,7 +209,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38618C141CF34F94009F9F7B /* Types.swift in Sources */,
 				846B89D51CE4D62D00C41BA1 /* Rate.swift in Sources */,
+				38618C161CF3503D009F9F7B /* Utilities.swift in Sources */,
+				38618C121CF34F74009F9F7B /* Protocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
