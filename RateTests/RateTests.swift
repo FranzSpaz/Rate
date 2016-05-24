@@ -138,6 +138,12 @@ class RateTests: XCTestCase
 
     func testShouldRateForPassedDaysSinceStart()
     {
+        let ratingTimeSetup = RatingTimeSetup(
+            daysUntilPrompt: 0,
+            usesUntilPrompt: 0,
+            remindPeriod: 0,
+            rateNewVersionIndipendency: false)
+        
         let rateSetupMock = MockRateSetup(
             urlString: "",
             timeSetup: ratingTimeSetup,
@@ -149,10 +155,13 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), false)
+        dataSaverMock.saveDate(NSDate(), key: "dateFirstBoot")
+        XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), true)
     }
 
     func testShouldRateForNumberOfUses()
     {
+        
         let rateSetupMock = MockRateSetup(
             urlString: "",
             timeSetup: ratingTimeSetup,
@@ -168,6 +177,12 @@ class RateTests: XCTestCase
 
     func testShoulRateForPassedDaysSinceRemindMeLater()
     {
+        let ratingTimeSetup = RatingTimeSetup(
+            daysUntilPrompt: 0,
+            usesUntilPrompt: 0,
+            remindPeriod: 0,
+            rateNewVersionIndipendency: false)
+
         let rateSetupMock = MockRateSetup(
             urlString: "",
             timeSetup: ratingTimeSetup,
@@ -179,6 +194,8 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceRemindMeLater(), false)
+        dataSaverMock.saveDate(NSDate(), key: "remindMeLater")
+        XCTAssertEqual(rate.shouldRateForPassedDaysSinceRemindMeLater(), true)
     }
 
     func testAppNotRated()
@@ -194,6 +211,8 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         XCTAssertTrue(rate.appNotRated())
+        dataSaverMock.saveBool(false, key: "rated")
+        XCTAssertEqual(rate.appNotRated(), false)
     }
 
     func testGetRatingAlertControllerIfNeeded_Passed()
@@ -266,6 +285,49 @@ class RateTests: XCTestCase
                         openUrl: urlMock)
         rate.voteNowOnAppStore()
         XCTAssertEqual(urlCompare, urlMock.simpleUrl)
+        urlMock.simpleUrl = nil
+        rate.voteNowOnAppStore()
     }
+
+    
+    func testUpdateForRelease()
+    {
+        let rateSetupMock = MockRateSetup(
+            urlString: "",
+            timeSetup: ratingTimeSetup,
+            textSetup: ratingTextSetup)
+        
+        let dataSaverMock = DataSaverMock()
+        
+        let rate = Rate(rateSetup: rateSetupMock,
+                        dataSaver: dataSaverMock,
+                        openUrl: urlMock)
+        dataSaverMock.lastSavedIntValue = nil
+        dataSaverMock.saveString("2.2.2", key: "currentVersion")
+        rate.updateForRelease("2.2.2", date: NSDate())
+        XCTAssertEqual(dataSaverMock.getIntForKey("usesNumber"), 1)
+        
+        
+    }
+    
+    func testUpdateDateFirstBootIfNeeded()
+    {
+        let rateSetupMock = MockRateSetup(
+            urlString: "",
+            timeSetup: ratingTimeSetup,
+            textSetup: ratingTextSetup)
+        
+        let dataSaverMock = DataSaverMock()
+        
+        let rate = Rate(rateSetup: rateSetupMock,
+                        dataSaver: dataSaverMock,
+                        openUrl: urlMock)
+        let date = NSDate()
+        dataSaverMock.saveDate(date, key: "dateFirstBoot")
+        let newDate = NSDate()
+        rate.updateDateFirstBootIfNeeded(newDate)
+        XCTAssertNotEqual(dataSaverMock.lastSavedDateValue, newDate)
+    }
+    
 }
 

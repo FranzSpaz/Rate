@@ -64,9 +64,8 @@ public class Rate
     {
         let noDate = dataSaver.getDate("dateFirstBoot") == nil
         let rateNewVersions = rateSetup.timeSetup.rateNewVersionsIndipendently
-        guard noDate || rateNewVersions else {
-            return
-        }
+        guard noDate || rateNewVersions else { return }
+        
         dataSaver.saveDate(date, key: "dateFirstBoot")
     }
 
