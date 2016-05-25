@@ -35,6 +35,7 @@ public class Rate
             }
             dataSaver.saveString(appVersion, key: currentVersionKey)
             dataSaver.saveInt(1, key: usesNumberKey)
+			resetRatedForNewVersionIfNeeded()
             updateDateFirstBootIfNeeded(date)
         }
     }
@@ -62,9 +63,7 @@ public class Rate
         alertController.addAction(UIAlertAction(
             title: rateSetup.textsSetup.ignoreButtonTitle,
             style: .Default,
-            handler: { _ in
-				self.dataSaver.saveBool(true, key: self.ratedKey)
-			}))
+            handler:ignoreInput(ignoreRating)))
 
         return alertController
     }
@@ -78,6 +77,14 @@ public class Rate
 		dataSaver.resetValueForKey(dateRemindMeLaterKey)
 	}
 
+	func ignoreRating() {
+		setRated(true)
+	}
+
+	func setRated(value: Bool) {
+		self.dataSaver.saveBool(value, key: self.ratedKey)
+	}
+
     func checkShouldRate() -> Bool
     {
         switch dataSaver.getBoolForKey(tappedRemindMeLaterKey) {
@@ -89,12 +96,17 @@ public class Rate
         }
     }
 
+	func resetRatedForNewVersionIfNeeded() {
+		let rateNewVersions = rateSetup.timeSetup.rateNewVersionsIndipendently
+		guard rateNewVersions else { return }
+		setRated(false)
+	}
+
     func updateDateFirstBootIfNeeded(date: NSDate)
     {
         let noDate = dataSaver.getDateForKey(dateFirstBootKey) == nil
         let rateNewVersions = rateSetup.timeSetup.rateNewVersionsIndipendently
         guard noDate || rateNewVersions else { return }
-        
         dataSaver.saveDate(date, key: dateFirstBootKey)
     }
 
@@ -112,6 +124,7 @@ public class Rate
     func voteNowOnAppStore()
     {
         guard let urlNoOpt = NSURL(string: rateSetup.appStoreUrlString) else { return }
+		setRated(true)
         urlOpener.openURL(urlNoOpt)
     }
 

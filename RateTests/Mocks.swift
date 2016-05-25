@@ -22,12 +22,12 @@ class MockRateSetup: RateSetupType
 
 class UrlOpenerMock: URLOpener
 {
-    var simpleUrl: NSURL?
-    func openURL(url: NSURL) -> Bool
-    {
-      simpleUrl = url
+	var simpleUrl: NSURL?
+	func openURL(url: NSURL) -> Bool
+	{
+		simpleUrl = url
 		return true
-    }
+	}
 }
 
 class DataSaverMock: DataSaverType

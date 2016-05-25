@@ -522,4 +522,583 @@ class RateTests: XCTestCase
 		XCTAssertNil(dataSaverMock.getDateForKey(rate.dateFirstBootKey))
 		XCTAssertNil(dataSaverMock.getDateForKey(rate.dateRemindMeLaterKey))
 	}
+
+	//MARK: - use cases
+
+	func testNumberOfUsesRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 10,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+	}
+
+	func testNumberOfUsesRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+	}
+
+	func testDaysUntilPromptRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 10,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+	}
+
+	func testDaysUntilPromptRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 0,
+			usesUntilPrompt: 10,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+	}
+
+	func testDaysUntilremindMeLaterRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+		after(0.1) { 
+			rate.saveDateRemindMeLater()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+				willCheck.fulfill()
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testDaysUntilremindMeLaterRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 0,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+		after(0.1) {
+			rate.saveDateRemindMeLater()
+
+			after(0.1) {
+				XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+				willCheck.fulfill()
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testUsesRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 10,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+		after(0.1) {
+			rate.updateForRelease("", date: NSDate())
+			rate.updateForRelease("", date: NSDate())
+			rate.updateForRelease("", date: NSDate())
+			rate.updateForRelease("", date: NSDate())
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					rate.updateForRelease("", date: NSDate())
+					rate.updateForRelease("", date: NSDate())
+					rate.updateForRelease("", date: NSDate())
+					rate.updateForRelease("", date: NSDate())
+
+					after(0.1) {
+						XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+						after(0.1) {
+							rate.updateForRelease("", date: NSDate())
+							rate.updateForRelease("", date: NSDate())
+							rate.updateForRelease("", date: NSDate())
+							rate.updateForRelease("", date: NSDate())
+
+							after(0.1) {
+								XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+								willCheck.fulfill()
+							}
+						}
+					}
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(10, handler: nil)
+	}
+
+	func testRemindRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 10,
+			remindPeriod: 0,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+		after(0.1) {
+			rate.saveDateRemindMeLater()
+
+			after(0.1) {
+				XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+				willCheck.fulfill()
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testNumberOfUsesAndVoteNowRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.voteNowOnAppStore()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+					willCheck.fulfill()
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testNumberOfUsesAndIgnoredRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.ignoreRating()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+					willCheck.fulfill()
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testVoteNowAndVersionUpdatedAndIndipendentlyRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: true)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("1", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.voteNowOnAppStore()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					rate.updateForRelease("2", date: NSDate())
+
+					after(0.1) {
+						XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+						willCheck.fulfill()
+					}
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testIgnoredAndVersionUpdatedAndIndipendentlyRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: true)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("1", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.ignoreRating()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					rate.updateForRelease("2", date: NSDate())
+
+					after(0.1) {
+						XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+						willCheck.fulfill()
+					}
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testVoteNowAndVersionUpdatedAndIndipendentlyRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("1", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.voteNowOnAppStore()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					rate.updateForRelease("2", date: NSDate())
+
+					after(0.1) {
+						XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+						willCheck.fulfill()
+					}
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testIgnoredAndVersionUpdatedAndIndipendentlyRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 1,
+			remindPeriod: 10,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("1", date: NSDate())
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.ignoreRating()
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+				after(0.1) {
+					rate.updateForRelease("2", date: NSDate())
+
+					after(0.1) {
+						XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+						willCheck.fulfill()
+					}
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testRemindAndVersionUpdatedAndIndipendentlyRateFalse() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 10,
+			remindPeriod: 0,
+			rateNewVersionIndipendently: true)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("1", date: NSDate())
+		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.saveDateRemindMeLater()
+
+			after(0.1) {
+				rate.updateForRelease("2", date: NSDate())
+
+				after(0.1) {
+					XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+					willCheck.fulfill()
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
+
+	func testRemindAndVersionUpdatedAndNotIndipendentlyRateTrue() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 10,
+			usesUntilPrompt: 10,
+			remindPeriod: 0,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		rate.updateForRelease("1", date: NSDate())
+		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) {
+			rate.saveDateRemindMeLater()
+
+			after(0.1) {
+				rate.updateForRelease("2", date: NSDate())
+
+				after(0.1) {
+					XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+					willCheck.fulfill()
+				}
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
 }
