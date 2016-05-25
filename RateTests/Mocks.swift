@@ -15,11 +15,10 @@ class MockRateSetup: RateSetupType
     }
 }
 
-
-class UrlOpenerMock: UrlOpener
+class UrlOpenerMock: URLOpener
 {
     var simpleUrl: NSURL?
-    func openUrl(url: NSURL)
+    func openURL(url: NSURL)
     {
       simpleUrl = url
     }
@@ -27,49 +26,41 @@ class UrlOpenerMock: UrlOpener
 
 class DataSaverMock: DataSaverType
 {
-    var lastSavedIntKey: String?
-    var lastSavedDateKey: String?
-    var lastSavedBoolKey: String?
-    var lastSavedStringKey: String?
-
-    var lastSavedIntValue: Int?
-    var lastSavedDateValue: NSDate?
-    var lastSavedBool: Bool?
-    var lastSavedString: String?
+    var dict: [String: AnyObject] = [:]
+    
+    func removeObjectForKey(key: String) {
+        dict[key] = nil
+    }
     
     func saveInt(value: Int, key: String) {
-        lastSavedIntKey = key
-        lastSavedIntValue = value
+        dict[key] = value
     }
     
     func saveBool(value: Bool, key: String) {
-        lastSavedBoolKey = key
-        lastSavedBool = value
+        dict[key] = value
     }
 
     func saveDate(date: NSDate, key: String) {
-        lastSavedDateKey = key
-        lastSavedDateValue = date
+        dict[key] = date
     }
 
     func saveString(string: String, key: String) {
-        lastSavedStringKey = key
-        lastSavedString = string
+        dict[key] = string
     }
 
     func getIntForKey(key: String) -> Int? {
-        return lastSavedIntValue
+        return dict[key] as? Int
     }
     
     func getBoolForKey(key: String) -> Bool? {
-        return lastSavedBool
+        return dict[key] as? Bool
     }
 
     func getDate(key: String) -> NSDate? {
-        return lastSavedDateValue
+        return dict[key] as? NSDate
     }
 
     func getString(key: String) -> String? {
-        return lastSavedString
+        return dict [key] as? String
     }
 }

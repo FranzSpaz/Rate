@@ -1,8 +1,8 @@
 import Foundation
 
-public protocol UrlOpener
+public protocol URLOpener
 {
-    func openUrl(url: NSURL)
+    func openURL(URL: NSURL)
 }
 
 public protocol RateSetupType
