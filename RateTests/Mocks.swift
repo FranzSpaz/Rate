@@ -1,6 +1,11 @@
 import Foundation
 @testable import Rate
 
+func after(value: Double, callback: () -> ()) {
+	let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(value * Double(NSEC_PER_SEC)))
+	dispatch_after(delayTime, dispatch_get_main_queue(),callback)
+}
+
 class MockRateSetup: RateSetupType
 {
     var appStoreUrlString: String
@@ -17,18 +22,19 @@ class MockRateSetup: RateSetupType
 
 class UrlOpenerMock: URLOpener
 {
-    var simpleUrl: NSURL?
-    func openURL(url: NSURL)
-    {
-      simpleUrl = url
-    }
+	var simpleUrl: NSURL?
+	func openURL(url: NSURL) -> Bool
+	{
+		simpleUrl = url
+		return true
+	}
 }
 
 class DataSaverMock: DataSaverType
 {
     var dict: [String: AnyObject] = [:]
     
-    func removeObjectForKey(key: String) {
+    func resetValueForKey(key: String) {
         dict[key] = nil
     }
     
@@ -56,11 +62,11 @@ class DataSaverMock: DataSaverType
         return dict[key] as? Bool
     }
 
-    func getDate(key: String) -> NSDate? {
+    func getDateForKey(key: String) -> NSDate? {
         return dict[key] as? NSDate
     }
 
-    func getString(key: String) -> String? {
+    func getStringForKey(key: String) -> String? {
         return dict [key] as? String
     }
 }

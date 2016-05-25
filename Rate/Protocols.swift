@@ -2,7 +2,7 @@ import Foundation
 
 public protocol URLOpener
 {
-    func openURL(URL: NSURL)
+    func openURL(url: NSURL) -> Bool
 }
 
 public protocol RateSetupType
@@ -18,8 +18,11 @@ public protocol DataSaverType
     func saveBool(value: Bool, key: String)
     func saveDate(date: NSDate, key: String)
     func saveString(string: String, key: String)
+
     func getIntForKey(key: String) -> Int?
     func getBoolForKey(key: String) -> Bool?
-    func getDate(key: String) -> NSDate?
-    func getString(key: String) -> String?
+    func getDateForKey(key: String) -> NSDate?
+    func getStringForKey(key: String) -> String?
+
+	func resetValueForKey(key: String)
 }

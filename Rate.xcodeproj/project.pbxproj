@@ -10,6 +10,7 @@
 		38618C121CF34F74009F9F7B /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38618C111CF34F74009F9F7B /* Protocols.swift */; };
 		38618C141CF34F94009F9F7B /* Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38618C131CF34F94009F9F7B /* Types.swift */; };
 		38618C161CF3503D009F9F7B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38618C151CF3503D009F9F7B /* Utilities.swift */; };
+		38EBC1671CF5D81C00DBB924 /* UtilitiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38EBC1661CF5D81C00DBB924 /* UtilitiesTests.swift */; };
 		846B89BE1CE4D44600C41BA1 /* Rate.h in Headers */ = {isa = PBXBuildFile; fileRef = 846B89BD1CE4D44600C41BA1 /* Rate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		846B89C51CE4D44700C41BA1 /* Rate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 846B89BA1CE4D44600C41BA1 /* Rate.framework */; };
 		846B89CA1CE4D44700C41BA1 /* RateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846B89C91CE4D44700C41BA1 /* RateTests.swift */; };
@@ -31,6 +32,7 @@
 		38618C111CF34F74009F9F7B /* Protocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		38618C131CF34F94009F9F7B /* Types.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Types.swift; sourceTree = "<group>"; };
 		38618C151CF3503D009F9F7B /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		38EBC1661CF5D81C00DBB924 /* UtilitiesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UtilitiesTests.swift; sourceTree = "<group>"; };
 		846B89BA1CE4D44600C41BA1 /* Rate.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Rate.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		846B89BD1CE4D44600C41BA1 /* Rate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Rate.h; sourceTree = "<group>"; };
 		846B89BF1CE4D44600C41BA1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -97,6 +99,7 @@
 				846B89C91CE4D44700C41BA1 /* RateTests.swift */,
 				846B89CB1CE4D44700C41BA1 /* Info.plist */,
 				84E16ED21CEDF22600E40FFF /* Mocks.swift */,
+				38EBC1661CF5D81C00DBB924 /* UtilitiesTests.swift */,
 			);
 			path = RateTests;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 			files = (
 				846B89CA1CE4D44700C41BA1 /* RateTests.swift in Sources */,
 				84E16ED31CEDF22600E40FFF /* Mocks.swift in Sources */,
+				38EBC1671CF5D81C00DBB924 /* UtilitiesTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +278,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -317,7 +321,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -337,6 +341,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Rate/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.innovativeware.Rate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -355,6 +360,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Rate/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.innovativeware.Rate;
 				PRODUCT_NAME = "$(TARGET_NAME)";
