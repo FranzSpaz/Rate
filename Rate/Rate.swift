@@ -2,6 +2,13 @@ import Foundation
 
 public class Rate
 {
+	let currentVersionKey = "currentVersion"
+	let usesNumberKey = "usesNumber"
+	let tappedRemindMeLaterKey = "tappedRemindMeLater"
+	let ratedKey = "rated"
+	let dateFirstBootKey = "dateFirstBoot"
+	let dateRemindMeLaterKey = "dateRemindMeLater"
+
     let rateSetup: RateSetupType
     let dataSaver: DataSaverType
     let urlOpener: URLOpener
@@ -17,17 +24,17 @@ public class Rate
 
     public func updateForRelease(appVersion: String, date: NSDate)
     {
-        if let currentVersion = dataSaver.getString("currentVersion") where currentVersion == appVersion {
-            let currentUsesNumber = dataSaver.getIntForKey("usesNumber") ?? 0
-            dataSaver.saveInt(currentUsesNumber + 1, key: "usesNumber")
+        if let currentVersion = dataSaver.getStringForKey(currentVersionKey) where currentVersion == appVersion {
+            let currentUsesNumber = dataSaver.getIntForKey(usesNumberKey) ?? 0
+            dataSaver.saveInt(currentUsesNumber + 1, key: usesNumberKey)
         } else {
-            let hasNoVersion = dataSaver.getString("currentVersion") == nil
+            let hasNoVersion = dataSaver.getStringForKey(currentVersionKey) == nil
             let shouldResetRemindMeLater = hasNoVersion || rateSetup.timeSetup.rateNewVersionsIndipendently
             if shouldResetRemindMeLater {
-                dataSaver.saveBool(false, key: "tappedRemindMeLater")
+                dataSaver.saveBool(false, key: tappedRemindMeLaterKey)
             }
-            dataSaver.saveString(appVersion, key: "currentVersion")
-            dataSaver.saveInt(1, key: "usesNumber")
+            dataSaver.saveString(appVersion, key: currentVersionKey)
+            dataSaver.saveInt(1, key: usesNumberKey)
             updateDateFirstBootIfNeeded(date)
         }
     }
@@ -55,14 +62,25 @@ public class Rate
         alertController.addAction(UIAlertAction(
             title: rateSetup.textsSetup.ignoreButtonTitle,
             style: .Default,
-            handler: { [weak self] _ in self?.dataSaver.saveBool(true, key: "rated") }))
+            handler: { _ in
+				self.dataSaver.saveBool(true, key: self.ratedKey)
+			}))
 
         return alertController
     }
 
+	public func reset() {
+		dataSaver.resetValueForKey(currentVersionKey)
+		dataSaver.resetValueForKey(usesNumberKey)
+		dataSaver.resetValueForKey(tappedRemindMeLaterKey)
+		dataSaver.resetValueForKey(ratedKey)
+		dataSaver.resetValueForKey(dateFirstBootKey)
+		dataSaver.resetValueForKey(dateRemindMeLaterKey)
+	}
+
     func checkShouldRate() -> Bool
     {
-        switch dataSaver.getBoolForKey("tappedRemindMeLater") {
+        switch dataSaver.getBoolForKey(tappedRemindMeLaterKey) {
         case false?:
             return shouldRateForNumberOfUses()
                 || shouldRateForPassedDaysSinceStart()
@@ -75,22 +93,22 @@ public class Rate
     
     func updateDateFirstBootIfNeeded(date: NSDate)
     {
-        let noDate = dataSaver.getDate("dateFirstBoot") == nil
+        let noDate = dataSaver.getDateForKey(dateFirstBootKey) == nil
         let rateNewVersions = rateSetup.timeSetup.rateNewVersionsIndipendently
         guard noDate || rateNewVersions else { return }
         
-        dataSaver.saveDate(date, key: "dateFirstBoot")
+        dataSaver.saveDate(date, key: dateFirstBootKey)
     }
 
     func getUsesNumber() -> Int
     {
-        return dataSaver.getIntForKey("usesNumber") ?? 0
+        return dataSaver.getIntForKey(usesNumberKey) ?? 0
     }
 
     func saveDateRemindMeLater()
     {
-        dataSaver.saveDate(NSDate(), key: "dateRemindMeLater")
-        dataSaver.saveBool(true, key: "tappedRemindMeLater")
+        dataSaver.saveDate(NSDate(), key: dateRemindMeLaterKey)
+        dataSaver.saveBool(true, key: tappedRemindMeLaterKey)
     }
 
     func voteNowOnAppStore()
@@ -101,7 +119,7 @@ public class Rate
 
     func shouldRateForPassedDaysSinceStart() -> Bool
     {
-        if let timeInterval = dataSaver.getDate("dateFirstBoot")?.timeIntervalSinceNow {
+        if let timeInterval = dataSaver.getDateForKey(dateFirstBootKey)?.timeIntervalSinceNow {
             return Int(timeInterval) >= rateSetup.timeSetup.daysUntilPrompt
         } else {
             return false
@@ -115,7 +133,7 @@ public class Rate
 
     func shouldRateForPassedDaysSinceRemindMeLater() -> Bool
     {
-        if let timeInterval = dataSaver.getDate("dateRemindMeLater")?.timeIntervalSinceNow {
+        if let timeInterval = dataSaver.getDateForKey(dateRemindMeLaterKey)?.timeIntervalSinceNow {
             return Int(timeInterval) >= rateSetup.timeSetup.remindPeriod
         } else {
             return false
@@ -124,7 +142,7 @@ public class Rate
 
     func appNotRated() -> Bool
     {
-        if let rated = dataSaver.getBoolForKey("rated") {
+        if let rated = dataSaver.getBoolForKey(ratedKey) {
             return rated
         } else {
             return true

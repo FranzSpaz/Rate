@@ -35,7 +35,7 @@ class RateTests: XCTestCase
 
         rate.updateForRelease("", date: NSDate())
 
-        XCTAssertEqual(dataSaverMock.getIntForKey("usesNumber"), 1)
+        XCTAssertEqual(dataSaverMock.getIntForKey(rate.usesNumberKey), 1)
     }
 
 
@@ -54,7 +54,7 @@ class RateTests: XCTestCase
         let expectedDate = NSDate()
         rate.updateForRelease("", date: expectedDate)
 
-        XCTAssertEqual(dataSaverMock.getDate("dateFirstBoot"), expectedDate)
+        XCTAssertEqual(dataSaverMock.getDateForKey(rate.dateFirstBootKey), expectedDate)
     }
 
     func testGetUsesNumber()
@@ -65,14 +65,13 @@ class RateTests: XCTestCase
             textSetup: ratingTextSetup)
 
         let dataSaverMock = DataSaverMock()
-        dataSaverMock.saveInt(101, key: "intKey")
 
         let rate = Rate(rateSetup: rateSetupMock,
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
-        rate.getUsesNumber()
+		dataSaverMock.saveInt(101, key: rate.usesNumberKey)
 
-        XCTAssertEqual(101, dataSaverMock.getIntForKey("intKey"))
+        XCTAssertEqual(101, rate.getUsesNumber())
     }
 
     func testUpdateUsesNumber()
@@ -90,12 +89,12 @@ class RateTests: XCTestCase
 
         rate.updateForRelease("", date: NSDate())
   
-        XCTAssertEqual(dataSaverMock.getIntForKey("usesNumber"), 1)
+        XCTAssertEqual(dataSaverMock.getIntForKey(rate.usesNumberKey), 1)
         rate.updateForRelease("", date: NSDate())
         rate.updateForRelease("", date: NSDate())
         rate.updateForRelease("", date: NSDate())
         rate.updateForRelease("", date: NSDate())
-        XCTAssertEqual(dataSaverMock.getIntForKey("usesNumber"), 5)
+        XCTAssertEqual(dataSaverMock.getIntForKey(rate.usesNumberKey), 5)
     }
 
     func testSaveDateFirstBoot()
@@ -114,7 +113,7 @@ class RateTests: XCTestCase
 
         rate.updateForRelease("", date: expectedDate)
     
-        XCTAssertEqual(dataSaverMock.getDate("dateFirstBoot"), expectedDate)
+        XCTAssertEqual(dataSaverMock.getDateForKey(rate.dateFirstBootKey), expectedDate)
     }
 
     func testSaveDateRemindMeLater()
@@ -151,7 +150,7 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), false)
-        dataSaverMock.saveDate(NSDate(), key: "dateFirstBoot")
+        dataSaverMock.saveDate(NSDate(), key: rate.dateFirstBootKey)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), true)
     }
 
@@ -191,7 +190,7 @@ class RateTests: XCTestCase
                         openUrl: urlMock)
         
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceRemindMeLater(), false)
-        dataSaverMock.saveDate(NSDate(), key: "dateRemindMeLater")
+        dataSaverMock.saveDate(NSDate(), key: rate.dateRemindMeLaterKey)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceRemindMeLater(), true)
     }
 
@@ -238,11 +237,11 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         
-        dataSaverMock.saveBool(false, key: "tappedRemindMeLater")
-        dataSaverMock.saveDate(NSDate(), key: "dateFirstBoot")
+        dataSaverMock.saveBool(false, key: rate.tappedRemindMeLaterKey)
+        dataSaverMock.saveDate(NSDate(), key: rate.dateFirstBootKey)
         XCTAssertEqual(rate.checkShouldRate(), true)
-        dataSaverMock.saveBool(true, key: "tappedRemindMeLater")
-        dataSaverMock.saveDate(NSDate(), key: "dateRemindMeLater")
+        dataSaverMock.saveBool(true, key: rate.tappedRemindMeLaterKey)
+        dataSaverMock.saveDate(NSDate(), key: rate.dateRemindMeLaterKey)
         XCTAssertEqual(rate.checkShouldRate(), true)
 }
     
@@ -272,7 +271,7 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         dataSaverMock.saveBool(true, key: "rated")
-        dataSaverMock.saveBool(false, key: "tappedRemindMeLater")
+        dataSaverMock.saveBool(false, key: rate.tappedRemindMeLaterKey)
         let alertController = rate.getRatingAlertControllerIfNeeded()
         XCTAssertNotNil(alertController)
         XCTAssertEqual(alertController?.title, "alert")
@@ -341,12 +340,12 @@ class RateTests: XCTestCase
                         openUrl: urlMock)
         dataSaverMock.saveString("2.2.2", key: "currentVersion")
         rate.updateForRelease("2.2.2", date: NSDate())
-        XCTAssertEqual(dataSaverMock.getIntForKey("usesNumber"), 1)
+        XCTAssertEqual(dataSaverMock.getIntForKey(rate.usesNumberKey), 1)
         dataSaverMock.saveString("1.1.1", key: "currentVersion")
         rate.updateForRelease("1.2.1", date: NSDate())
         dataSaverMock.saveString("1.1.2", key: "currentVersion")
         rate.updateForRelease("1.1.4", date: NSDate())
-        XCTAssertEqual(dataSaverMock.getBoolForKey("tappedRemindMeLater"), false)
+        XCTAssertEqual(dataSaverMock.getBoolForKey(rate.tappedRemindMeLaterKey), false)
     }
     
     func testUpdateDateFirstBootIfNeeded()
@@ -362,9 +361,40 @@ class RateTests: XCTestCase
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
         let date = NSDate()
-        dataSaverMock.saveDate(date, key: "dateFirstBoot")
+        dataSaverMock.saveDate(date, key: rate.dateFirstBootKey)
         let newDate = NSDate()
         rate.updateDateFirstBootIfNeeded(newDate)
-        XCTAssertNotEqual(dataSaverMock.getDate("dateFirstBoot"), newDate)
+        XCTAssertNotEqual(dataSaverMock.getDateForKey(rate.dateFirstBootKey), newDate)
     }
+
+	func testResetAll() {
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		let expectedDate = NSDate()
+
+		dataSaverMock.saveString("12345", key: rate.currentVersionKey)
+		dataSaverMock.saveInt(3, key: rate.usesNumberKey)
+		dataSaverMock.saveBool(true, key: rate.tappedRemindMeLaterKey)
+		dataSaverMock.saveBool(true, key: rate.ratedKey)
+		dataSaverMock.saveDate(expectedDate, key: rate.dateFirstBootKey)
+		dataSaverMock.saveDate(expectedDate, key: rate.dateRemindMeLaterKey)
+
+		rate.reset()
+
+		XCTAssertNil(dataSaverMock.getStringForKey(rate.currentVersionKey))
+		XCTAssertNil(dataSaverMock.getIntForKey(rate.usesNumberKey))
+		XCTAssertNil(dataSaverMock.getBoolForKey(rate.tappedRemindMeLaterKey))
+		XCTAssertNil(dataSaverMock.getBoolForKey(rate.ratedKey))
+		XCTAssertNil(dataSaverMock.getDateForKey(rate.dateFirstBootKey))
+		XCTAssertNil(dataSaverMock.getDateForKey(rate.dateRemindMeLaterKey))
+	}
 }
