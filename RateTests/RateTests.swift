@@ -154,8 +154,7 @@ class RateTests: XCTestCase
 
 		let willPassTime = expectationWithDescription("willPassTime")
 
-		let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC)))
-		dispatch_after(delayTime, dispatch_get_main_queue()) {
+		after(0.1) {
 			XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), true)
 			willPassTime.fulfill()
 		}
@@ -300,8 +299,42 @@ class RateTests: XCTestCase
                         openUrl: urlMock)
         XCTAssertTrue(rate.appNotRated())
         dataSaverMock.saveBool(false, key: "rated")
-        XCTAssertEqual(rate.appNotRated(), false)
+        XCTAssertEqual(rate.appNotRated(), true)
     }
+
+	func testShouldNotRateIfIgnoredStart() {
+		let ratingTimeSetup = RatingTimeSetup(
+			daysUntilPrompt: 0,
+			usesUntilPrompt: 0,
+			remindPeriod: 3,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate = Rate(rateSetup: rateSetupMock,
+		                dataSaver: dataSaverMock,
+		                openUrl: urlMock)
+
+		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
+
+		let willCheck = expectationWithDescription("willCheck")
+
+		after(0.1) { 
+			dataSaverMock.saveBool(true, key: rate.ratedKey)
+
+			after(0.1) {
+				XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
+				willCheck.fulfill()
+			}
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
+	}
 
     func testCheckShouldRate()
     {
@@ -362,7 +395,7 @@ class RateTests: XCTestCase
         let rate = Rate(rateSetup: rateSetupMock,
                         dataSaver: dataSaverMock,
                         openUrl: urlMock)
-        dataSaverMock.saveBool(true, key: "rated")
+        dataSaverMock.saveBool(false, key: "rated")
         dataSaverMock.saveBool(false, key: rate.tappedRemindMeLaterKey)
         let alertController = rate.getRatingAlertControllerIfNeeded()
         XCTAssertNotNil(alertController)

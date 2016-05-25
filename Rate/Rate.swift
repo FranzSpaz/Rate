@@ -141,7 +141,7 @@ public class Rate
     func appNotRated() -> Bool
     {
         if let rated = dataSaver.getBoolForKey(ratedKey) {
-            return rated
+            return rated == false
         } else {
             return true
         }

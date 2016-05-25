@@ -1,6 +1,11 @@
 import Foundation
 @testable import Rate
 
+func after(value: Double, callback: () -> ()) {
+	let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(value * Double(NSEC_PER_SEC)))
+	dispatch_after(delayTime, dispatch_get_main_queue(),callback)
+}
+
 class MockRateSetup: RateSetupType
 {
     var appStoreUrlString: String
