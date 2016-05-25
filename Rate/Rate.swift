@@ -81,16 +81,14 @@ public class Rate
     func checkShouldRate() -> Bool
     {
         switch dataSaver.getBoolForKey(tappedRemindMeLaterKey) {
-        case false?:
-            return shouldRateForNumberOfUses()
-                || shouldRateForPassedDaysSinceStart()
         case true?:
             return shouldRateForPassedDaysSinceRemindMeLater()
         default:
-            return false
+			return shouldRateForNumberOfUses()
+				|| shouldRateForPassedDaysSinceStart()
         }
     }
-    
+
     func updateDateFirstBootIfNeeded(date: NSDate)
     {
         let noDate = dataSaver.getDateForKey(dateFirstBootKey) == nil

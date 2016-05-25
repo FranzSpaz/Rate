@@ -156,7 +156,6 @@ class RateTests: XCTestCase
 
     func testShouldRateForNumberOfUses()
     {
-        
         let rateSetupMock = MockRateSetup(
             urlString: "",
             timeSetup: ratingTimeSetup,
@@ -193,6 +192,90 @@ class RateTests: XCTestCase
         dataSaverMock.saveDate(NSDate(), key: rate.dateRemindMeLaterKey)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceRemindMeLater(), true)
     }
+
+	func testShouldRateForRemindMeLaterIfRemindPeriodChanged() {
+		let ratingTimeSetup1 = RatingTimeSetup(
+			daysUntilPrompt: 0,
+			usesUntilPrompt: 0,
+			remindPeriod: 3,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock1 = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup1,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate1 = Rate(rateSetup: rateSetupMock1,
+		                 dataSaver: dataSaverMock,
+		                 openUrl: urlMock)
+
+		XCTAssertEqual(rate1.shouldRateForPassedDaysSinceRemindMeLater(), false)
+
+		rate1.saveDateRemindMeLater()
+
+		XCTAssertEqual(rate1.shouldRateForPassedDaysSinceRemindMeLater(), false)
+
+		let ratingTimeSetup2 = RatingTimeSetup(
+			daysUntilPrompt: 0,
+			usesUntilPrompt: 0,
+			remindPeriod: 0,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock2 = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup2,
+			textSetup: ratingTextSetup)
+
+		let rate2 = Rate(rateSetup: rateSetupMock2,
+		                 dataSaver: dataSaverMock,
+		                 openUrl: urlMock)
+
+		XCTAssertEqual(rate2.shouldRateForPassedDaysSinceRemindMeLater(), true)
+	}
+
+	func testShouldShowAlertForRemindMeLaterIfRemindPeriodChanged() {
+		let ratingTimeSetup1 = RatingTimeSetup(
+			daysUntilPrompt: 0,
+			usesUntilPrompt: 0,
+			remindPeriod: 3,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock1 = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup1,
+			textSetup: ratingTextSetup)
+
+		let dataSaverMock = DataSaverMock()
+
+		let rate1 = Rate(rateSetup: rateSetupMock1,
+		                 dataSaver: dataSaverMock,
+		                 openUrl: urlMock)
+
+		XCTAssertNotNil(rate1.getRatingAlertControllerIfNeeded())
+
+		rate1.saveDateRemindMeLater()
+
+		XCTAssertNil(rate1.getRatingAlertControllerIfNeeded())
+
+		let ratingTimeSetup2 = RatingTimeSetup(
+			daysUntilPrompt: 0,
+			usesUntilPrompt: 0,
+			remindPeriod: 0,
+			rateNewVersionIndipendently: false)
+
+		let rateSetupMock2 = MockRateSetup(
+			urlString: "",
+			timeSetup: ratingTimeSetup2,
+			textSetup: ratingTextSetup)
+
+		let rate2 = Rate(rateSetup: rateSetupMock2,
+		                 dataSaver: dataSaverMock,
+		                 openUrl: urlMock)
+
+		XCTAssertNotNil(rate2.getRatingAlertControllerIfNeeded())
+	}
 
     func testAppNotRated()
     {
