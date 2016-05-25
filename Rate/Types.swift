@@ -5,10 +5,10 @@ public struct RatingTimeSetup
     let remindPeriod: Int
     let rateNewVersionsIndipendently: Bool
 
-    public init(daysUntilPrompt: Int, usesUntilPrompt: Int, remindPeriod: Int, rateNewVersionIndipendency: Bool)
+    public init(daysUntilPrompt: Int, usesUntilPrompt: Int, remindPeriod: Int, rateNewVersionIndipendently: Bool)
     {
         self.daysUntilPrompt = daysUntilPrompt
-        self.rateNewVersionsIndipendently = rateNewVersionIndipendency
+        self.rateNewVersionsIndipendently = rateNewVersionIndipendently
         self.remindPeriod = remindPeriod
         self.usesUntilPrompt = usesUntilPrompt
     }

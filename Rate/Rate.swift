@@ -4,11 +4,11 @@ public class Rate
 {
     let rateSetup: RateSetupType
     let dataSaver: DataSaverType
-    let urlOpener: UrlOpener
+    let urlOpener: URLOpener
 
     public init(rateSetup: RateSetupType,
                 dataSaver: DataSaverType,
-                openUrl: UrlOpener)
+                openUrl: URLOpener)
     {
         self.rateSetup = rateSetup
         self.dataSaver = dataSaver
@@ -21,6 +21,11 @@ public class Rate
             let currentUsesNumber = dataSaver.getIntForKey("usesNumber") ?? 0
             dataSaver.saveInt(currentUsesNumber + 1, key: "usesNumber")
         } else {
+            let hasNoVersion = dataSaver.getString("currentVersion") == nil
+            let shouldResetRemindMeLater = hasNoVersion || rateSetup.timeSetup.rateNewVersionsIndipendently
+            if shouldResetRemindMeLater {
+                dataSaver.saveBool(false, key: "tappedRemindMeLater")
+            }
             dataSaver.saveString(appVersion, key: "currentVersion")
             dataSaver.saveInt(1, key: "usesNumber")
             updateDateFirstBootIfNeeded(date)
@@ -29,14 +34,9 @@ public class Rate
 
     public func getRatingAlertControllerIfNeeded() -> UIAlertController?
     {
-        let shouldRate = shouldRateForPassedDaysSinceStart() ||
-            shouldRateForNumberOfUses() ||
-            shouldRateForPassedDaysSinceRemindMeLater()
-
-        guard shouldRate && appNotRated() else {
+        guard checkShouldRate() && appNotRated() else {
             return nil
         }
-
         let alertController = UIAlertController(
             title: rateSetup.textsSetup.alertTitle,
             message: rateSetup.textsSetup.alertMessage,
@@ -60,6 +60,19 @@ public class Rate
         return alertController
     }
 
+    func checkShouldRate() -> Bool
+    {
+        switch dataSaver.getBoolForKey("tappedRemindMeLater") {
+        case false?:
+            return shouldRateForNumberOfUses()
+                || shouldRateForPassedDaysSinceStart()
+        case true?:
+            return shouldRateForPassedDaysSinceRemindMeLater()
+        default:
+            return false
+        }
+    }
+    
     func updateDateFirstBootIfNeeded(date: NSDate)
     {
         let noDate = dataSaver.getDate("dateFirstBoot") == nil
@@ -74,15 +87,16 @@ public class Rate
         return dataSaver.getIntForKey("usesNumber") ?? 0
     }
 
-    public func saveDateRemindMeLater()
+    func saveDateRemindMeLater()
     {
         dataSaver.saveDate(NSDate(), key: "dateRemindMeLater")
+        dataSaver.saveBool(true, key: "tappedRemindMeLater")
     }
 
     func voteNowOnAppStore()
     {
         guard let urlNoOpt = NSURL(string: rateSetup.appStoreUrlString) else { return }
-        urlOpener.openUrl(urlNoOpt)
+        urlOpener.openURL(urlNoOpt)
     }
 
     func shouldRateForPassedDaysSinceStart() -> Bool
