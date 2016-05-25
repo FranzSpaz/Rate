@@ -2,7 +2,7 @@ import Foundation
 
 public protocol URLOpener
 {
-    func openURL(URL: NSURL)
+    func openURL(url: NSURL) -> Bool
 }
 
 public protocol RateSetupType
