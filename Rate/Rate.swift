@@ -118,7 +118,7 @@ public class Rate
     func shouldRateForPassedDaysSinceStart() -> Bool
     {
         if let timeInterval = dataSaver.getDateForKey(dateFirstBootKey)?.timeIntervalSinceNow {
-            return Int(timeInterval) >= rateSetup.timeSetup.daysUntilPrompt
+            return (-timeInterval) >= Double(rateSetup.timeSetup.daysUntilPrompt*3600*24)
         } else {
             return false
         }
@@ -132,7 +132,7 @@ public class Rate
     func shouldRateForPassedDaysSinceRemindMeLater() -> Bool
     {
         if let timeInterval = dataSaver.getDateForKey(dateRemindMeLaterKey)?.timeIntervalSinceNow {
-            return Int(timeInterval) >= rateSetup.timeSetup.remindPeriod
+            return (-timeInterval) >= Double(rateSetup.timeSetup.remindPeriod*3600*24)
         } else {
             return false
         }

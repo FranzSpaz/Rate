@@ -151,7 +151,16 @@ class RateTests: XCTestCase
                         openUrl: urlMock)
         XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), false)
         dataSaverMock.saveDate(NSDate(), key: rate.dateFirstBootKey)
-        XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), true)
+
+		let willPassTime = expectationWithDescription("willPassTime")
+
+		let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC)))
+		dispatch_after(delayTime, dispatch_get_main_queue()) {
+			XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), true)
+			willPassTime.fulfill()
+		}
+
+		waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testShouldRateForNumberOfUses()
