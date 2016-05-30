@@ -2,8 +2,7 @@ import XCTest
 import Foundation
 @testable import Rate
 
-class UtilitiesTests: XCTestCase
-{
+class UtilitiesTests: XCTestCase {
 	func testIgnoreInput() {
 		let willBeCalled = expectationWithDescription("willBeCalled")
 

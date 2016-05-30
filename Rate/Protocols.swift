@@ -1,19 +1,12 @@
 import Foundation
 
-public protocol URLOpener
-{
-    func openURL(url: NSURL) -> Bool
-}
-
-public protocol RateSetupType
-{
+public protocol RateSetupType {
     var appStoreUrlString: String { get }
     var timeSetup: RatingTimeSetup { get }
     var textsSetup: RatingTextSetup { get }
 }
 
-public protocol DataSaverType
-{
+public protocol DataSaverType {
     func saveInt(value: Int, key: String)
     func saveBool(value: Bool, key: String)
     func saveDate(date: NSDate, key: String)
@@ -25,4 +18,8 @@ public protocol DataSaverType
     func getStringForKey(key: String) -> String?
 
 	func resetValueForKey(key: String)
+}
+
+public protocol URLOpenerType {
+	func openURL(url: NSURL) -> Bool
 }

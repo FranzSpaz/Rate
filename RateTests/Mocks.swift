@@ -6,33 +6,30 @@ func after(value: Double, callback: () -> ()) {
 	dispatch_after(delayTime, dispatch_get_main_queue(),callback)
 }
 
-class MockRateSetup: RateSetupType
-{
-    var appStoreUrlString: String
-    var timeSetup: RatingTimeSetup
-    var textsSetup: RatingTextSetup
- 
-    init(urlString: String, timeSetup: RatingTimeSetup, textSetup: RatingTextSetup)
-    {
-        self.appStoreUrlString = urlString
-        self.textsSetup = textSetup
-        self.timeSetup = timeSetup
-    }
+class MockRateSetup: RateSetupType {
+	var appStoreUrlString: String
+	var timeSetup: RatingTimeSetup
+	var textsSetup: RatingTextSetup
+
+	init(urlString: String,
+	     timeSetup: RatingTimeSetup,
+	     textSetup: RatingTextSetup) {
+		self.appStoreUrlString = urlString
+		self.textsSetup = textSetup
+		self.timeSetup = timeSetup
+	}
 }
 
-class UrlOpenerMock: URLOpener
-{
-	var simpleUrl: NSURL?
-	func openURL(url: NSURL) -> Bool
-	{
-		simpleUrl = url
+class UrlOpenerMock: URLOpenerType {
+	var lastOpenedURL: NSURL?
+	func openURL(url: NSURL) -> Bool {
+		lastOpenedURL = url
 		return true
 	}
 }
 
-class DataSaverMock: DataSaverType
-{
-    var dict: [String: AnyObject] = [:]
+class DataSaverMock: DataSaverType {
+    var dict: [String:AnyObject] = [:]
     
     func resetValueForKey(key: String) {
         dict[key] = nil

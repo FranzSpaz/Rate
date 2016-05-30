@@ -1,4 +1,3 @@
-func ignoreInput<T>(function: () -> ()) -> T -> ()
-{
+func ignoreInput<T>(function: () -> ()) -> T -> () {
     return { _ in function() }
 }
