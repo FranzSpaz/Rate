@@ -20,7 +20,7 @@ class MockRateSetup: RateSetupType {
 	}
 }
 
-class UrlOpenerMock: URLOpener {
+class UrlOpenerMock: URLOpenerType {
 	var lastOpenedURL: NSURL?
 	func openURL(url: NSURL) -> Bool {
 		lastOpenedURL = url

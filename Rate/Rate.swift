@@ -10,11 +10,11 @@ public class Rate {
 
 	let rateSetup: RateSetupType
 	let dataSaver: DataSaverType
-	let urlOpener: URLOpener
+	let urlOpener: URLOpenerType
 
 	public init(rateSetup: RateSetupType,
 	            dataSaver: DataSaverType,
-	            openUrl: URLOpener) {
+	            openUrl: URLOpenerType) {
 		self.rateSetup = rateSetup
 		self.dataSaver = dataSaver
 		self.urlOpener = openUrl

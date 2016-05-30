@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol URLOpener {
+public protocol URLOpenerType {
     func openURL(url: NSURL) -> Bool
 }
 
