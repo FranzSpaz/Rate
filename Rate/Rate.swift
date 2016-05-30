@@ -14,10 +14,10 @@ public class Rate {
 
 	public init(rateSetup: RateSetupType,
 	            dataSaver: DataSaverType,
-	            openUrl: URLOpenerType) {
+	            urlOpener: URLOpenerType) {
 		self.rateSetup = rateSetup
 		self.dataSaver = dataSaver
-		self.urlOpener = openUrl
+		self.urlOpener = urlOpener
 	}
 
 	public func updateForRelease(appVersion: String, date: NSDate) {

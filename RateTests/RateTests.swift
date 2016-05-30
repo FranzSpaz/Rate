@@ -3,7 +3,7 @@ import Foundation
 @testable import Rate
 
 class RateTests: XCTestCase {
-	let urlMock = UrlOpenerMock()
+	let urlOpenerMock = UrlOpenerMock()
 
 	let ratingTimeSetup = RatingTimeSetup(
 		daysUntilPrompt: 2,
@@ -29,7 +29,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 
@@ -46,7 +46,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		let expectedDate = NSDate()
 		rate.updateForRelease("", date: expectedDate)
@@ -64,7 +64,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		dataSaverMock.saveInt(101, key: rate.usesNumberKey)
 
 		XCTAssertEqual(101, rate.getUsesNumber())
@@ -80,7 +80,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 
@@ -103,7 +103,7 @@ class RateTests: XCTestCase {
 		let dataSaverMock = DataSaverMock()
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: expectedDate)
 
@@ -120,7 +120,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		rate.saveDateRemindMeLater()
 	}
 
@@ -140,7 +140,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		XCTAssertEqual(rate.shouldRateForPassedDaysSinceStart(), false)
 		dataSaverMock.saveDate(NSDate(), key: rate.dateFirstBootKey)
 
@@ -164,7 +164,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		XCTAssertEqual(rate.shouldRateForNumberOfUses(), false)
 	}
 
@@ -184,7 +184,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		XCTAssertEqual(rate.shouldRateForPassedDaysSinceRemindMeLater(), false)
 		dataSaverMock.saveDate(NSDate(), key: rate.dateRemindMeLaterKey)
@@ -207,7 +207,7 @@ class RateTests: XCTestCase {
 
 		let rate1 = Rate(rateSetup: rateSetupMock1,
 		                 dataSaver: dataSaverMock,
-		                 openUrl: urlMock)
+		                 urlOpener: urlOpenerMock)
 
 		XCTAssertEqual(rate1.shouldRateForPassedDaysSinceRemindMeLater(), false)
 
@@ -228,7 +228,7 @@ class RateTests: XCTestCase {
 
 		let rate2 = Rate(rateSetup: rateSetupMock2,
 		                 dataSaver: dataSaverMock,
-		                 openUrl: urlMock)
+		                 urlOpener: urlOpenerMock)
 
 		XCTAssertEqual(rate2.shouldRateForPassedDaysSinceRemindMeLater(), true)
 	}
@@ -249,7 +249,7 @@ class RateTests: XCTestCase {
 
 		let rate1 = Rate(rateSetup: rateSetupMock1,
 		                 dataSaver: dataSaverMock,
-		                 openUrl: urlMock)
+		                 urlOpener: urlOpenerMock)
 
 		XCTAssertNotNil(rate1.getRatingAlertControllerIfNeeded())
 
@@ -270,7 +270,7 @@ class RateTests: XCTestCase {
 
 		let rate2 = Rate(rateSetup: rateSetupMock2,
 		                 dataSaver: dataSaverMock,
-		                 openUrl: urlMock)
+		                 urlOpener: urlOpenerMock)
 
 		XCTAssertNotNil(rate2.getRatingAlertControllerIfNeeded())
 	}
@@ -285,7 +285,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		XCTAssertTrue(rate.appNotRated())
 		dataSaverMock.saveBool(false, key: "rated")
 		XCTAssertEqual(rate.appNotRated(), true)
@@ -307,7 +307,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
 
@@ -348,7 +348,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		dataSaverMock.saveBool(false, key: rate.tappedRemindMeLaterKey)
 		dataSaverMock.saveDate(NSDate(), key: rate.dateFirstBootKey)
@@ -381,7 +381,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		dataSaverMock.saveBool(false, key: "rated")
 		dataSaverMock.saveBool(false, key: rate.tappedRemindMeLaterKey)
 		let alertController = rate.getRatingAlertControllerIfNeeded()
@@ -408,7 +408,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		dataSaverMock.saveBool(false, key: "rated")
 		XCTAssertEqual(rate.getRatingAlertControllerIfNeeded(), nil)
 	}
@@ -424,10 +424,10 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		rate.voteNowOnAppStore()
-		XCTAssertEqual(urlCompare, urlMock.lastOpenedURL)
-		urlMock.lastOpenedURL = nil
+		XCTAssertEqual(urlCompare, urlOpenerMock.lastOpenedURL)
+		urlOpenerMock.lastOpenedURL = nil
 		rate.voteNowOnAppStore()
 	}
 
@@ -446,7 +446,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		dataSaverMock.saveString("2.2.2", key: "currentVersion")
 		rate.updateForRelease("2.2.2", date: NSDate())
 		XCTAssertEqual(dataSaverMock.getIntForKey(rate.usesNumberKey), 1)
@@ -467,7 +467,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 		let date = NSDate()
 		dataSaverMock.saveDate(date, key: rate.dateFirstBootKey)
 		let newDate = NSDate()
@@ -485,7 +485,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		let expectedDate = NSDate()
 
@@ -524,7 +524,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
@@ -546,7 +546,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -568,7 +568,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
@@ -590,7 +590,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -612,7 +612,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -646,7 +646,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -680,7 +680,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
@@ -739,7 +739,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
@@ -773,7 +773,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -812,7 +812,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -851,7 +851,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("1", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -894,7 +894,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("1", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -937,7 +937,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("1", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -980,7 +980,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("1", date: NSDate())
 		XCTAssertNotNil(rate.getRatingAlertControllerIfNeeded())
@@ -1023,7 +1023,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("1", date: NSDate())
 		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
@@ -1062,7 +1062,7 @@ class RateTests: XCTestCase {
 
 		let rate = Rate(rateSetup: rateSetupMock,
 		                dataSaver: dataSaverMock,
-		                openUrl: urlMock)
+		                urlOpener: urlOpenerMock)
 
 		rate.updateForRelease("1", date: NSDate())
 		XCTAssertNil(rate.getRatingAlertControllerIfNeeded())
